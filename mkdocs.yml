@@ -1,0 +1,67 @@
+site_name: Interactions.Rest
+site_url: 'https://docs.iaas-test.xyz'
+repo_url: 'https://github.com/Interactions-as-a-Service/docs'
+edit_uri: blob/main/docs
+copyright: Copyright &copy; 2022 Skye-31
+use_directory_urls: false
+theme:
+  name: material
+  palette:
+    - media: '(prefers-color-scheme: light)'
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: '(prefers-color-scheme: dark)'
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.expand
+    - navigation.top
+    - toc.follow
+    - toc.integrate
+    - header.autohide
+    - content.code.annotate
+    - content.tabs.link
+    - content.tooltips
+  icon:
+    repo: fontawesome/brands/github
+nav:
+  - Home: index.md
+  - D1 Orm:
+      - Getting Started: d1-orm/index.md
+      - Query Building: d1-orm/query-building.md
+      - Models: d1-orm/models.md
+      - Upserting: d1-orm/upserting.md
+      - API Reference: https://orm.interactions.rest/modules
+markdown_extensions:
+  - toc:
+      permalink: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.highlight:
+      anchor_linenums: true
+      linenums_style: pymdownx-inline
+  - pymdownx.snippets:
+      check_paths: true
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.highlight
+  - admonition
+  - pymdownx.details
+extra:
+  social:
+    - icon: fontawesome/brands/discord
+      link: 'https://discord.gg/j22RkU7eBr'
+      name: Our Discord
+  generator: false
+plugins:
+  - search
+  - git-revision-date-localized:
+      enable_creation_date: true
