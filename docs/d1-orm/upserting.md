@@ -100,11 +100,11 @@ const users = new Model(
 	{
 		tableName: "users",
 		D1Orm: MyD1OrmInstance,
+		primaryKeys: "id",
 	},
 	{
 		id: {
 			type: DataTypes.INTEGER,
-			primaryKey: true,
 		},
 		name: {
 			type: DataTypes.STRING,
