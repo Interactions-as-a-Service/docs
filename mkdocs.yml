@@ -34,8 +34,8 @@ nav:
   - Home: index.md
   - D1 Orm:
       - Getting Started: d1-orm/index.md
-      - Query Building: d1-orm/query-building.md
       - Models: d1-orm/models.md
+      - Query Building: d1-orm/query-building.md
       - Upserting: d1-orm/upserting.md
       - API Reference: https://orm.interactions.rest/modules
 markdown_extensions:

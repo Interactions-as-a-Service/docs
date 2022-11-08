@@ -9,24 +9,33 @@ It's best to be used when you control the primary key of the record, and you wan
 
 ## Worked Example
 
-```ts
-type User = {
-	id: number;
-	name: string;
-	email: string;
-};
+=== "TypeScript"
+	```ts linenums="1"
+	type User = {
+		id: number;
+		name: string;
+		email: string;
+	};
 
-const user: User = {
-	id: 1,
-	name: "John Doe",
-	email: "john-doe@gmail.com",
-};
-```
+	const user: User = {
+		id: 1,
+		name: "John Doe",
+		email: "john-doe@gmail.com",
+	};
+	```
+=== "JavaScript"
+	```js linenums="1"
+	const user = {
+		id: 1,
+		name: "John Doe",
+		email: "john-doe@gmail.com",
+	};
+	```
 
 In this case, our user will always have an ID of 1.
 An UPSERT query in SQL looks something like
 
-```sql
+```sql title="upsert.sql"
 INSERT INTO USERS (id, name, email) VALUES (1, 'John Doe', 'john-doe@gmail.com')
 ON CONFLICT(id) DO UPDATE SET name = 'John Doe', email = 'john-doe@gmail.com'
 WHERE id = 1;
@@ -36,42 +45,74 @@ This query attempts to insert our user with an ID of 1, and if it already exists
 
 ## Using the QueryBuilder
 
-```ts
-import { GenerateQuery, QueryType } from "d1-orm";
+=== "TypeScript"
+	```ts linenums="1"
+	import { GenerateQuery, QueryType } from "d1-orm";
 
-type User = {
-	id: number;
-	name: string;
-	email: string;
-};
+	type User = {
+		id: number;
+		name: string;
+		email: string;
+	};
 
-const user: User = {
-	id: 1,
-	name: "John Doe",
-	email: "john-doe@gmail.com",
-};
+	const user: User = {
+		id: 1,
+		name: "John Doe",
+		email: "john-doe@gmail.com",
+	};
 
-const statement = GenerateQuery(
-	QueryType.UPSERT,
-	"users",
+	const statement = GenerateQuery<User>(
+		QueryType.UPSERT,
+		"users",
+		{
+			data: user,
+			upsertOnlyUpdateData: {
+				name: user.name,
+				email: user.email,
+			},
+			where: {
+				id: user.id,
+			},
+		},
+		"id"
+	);
+	// Returns
 	{
-		data: user,
-		upsertOnlyUpdateData: {
-			name: user.name,
-			email: user.email,
+		query: "INSERT INTO users (id, name, email) VALUES (?, ?, ?) ON CONFLICT(id) DO UPDATE SET name = ?, email = ? WHERE id = ?",
+		bindings: [1, "John Doe", "john-doe@gmail.com", "John Doe", "john-doe@gmail.com", 1]
+	}
+	```
+=== "JavaScript"
+	```js linenums="1"
+	import { GenerateQuery, QueryType } from "d1-orm";
+
+	const user = {
+		id: 1,
+		name: "John Doe",
+		email: "john-doe@gmail.com",
+	};
+
+	const statement = GenerateQuery(
+		QueryType.UPSERT,
+		"users",
+		{
+			data: user,
+			upsertOnlyUpdateData: {
+				name: user.name,
+				email: user.email,
+			},
+			where: {
+				id: user.id,
+			},
 		},
-		where: {
-			id: user.id,
-		},
-	},
-	"id"
-);
-// Returns
-{
-	query: "INSERT INTO users (id, name, email) VALUES (?, ?, ?) ON CONFLICT(id) DO UPDATE SET name = ?, email = ? WHERE id = ?",
-	bindings: [1, "John Doe", "john-doe@gmail.com", "John Doe", "john-doe@gmail.com", 1]
-}
-```
+		"id"
+	);
+	// Returns
+	{
+		query: "INSERT INTO users (id, name, email) VALUES (?, ?, ?) ON CONFLICT(id) DO UPDATE SET name = ?, email = ? WHERE id = ?",
+		bindings: [1, "John Doe", "john-doe@gmail.com", "John Doe", "john-doe@gmail.com", 1]
+	}
+	```
 
 That might have looked like a lot. If you're confused about the first statements, reading [the Query Building guide](./query-building.md) will help you out.
 The important part here is the final code block.
@@ -92,47 +133,89 @@ Finally, the QueryBuilder allows you to provide a primary key for UPSERT operati
 
 This follows the same process as the previous example, but with a [Model](./models.md) instead of the raw query builder interface.
 
-```ts
-import { Model, DataTypes } from "d1-orm";
-import type { Infer } from "d1-orm";
+=== "TypeScript"
+	```ts linenums="1"
+	import { Model, DataTypes } from "d1-orm";
+	import type { Infer } from "d1-orm";
 
-const users = new Model(
-	{
-		tableName: "users",
-		D1Orm: MyD1OrmInstance,
-		primaryKeys: "id",
-	},
-	{
-		id: {
-			type: DataTypes.INTEGER,
+	const users = new Model(
+		{
+			tableName: "users",
+			D1Orm: MyD1OrmInstance,
+			primaryKeys: "id",
 		},
-		name: {
-			type: DataTypes.STRING,
-			notNull: true,
+		{
+			id: {
+				type: DataTypes.INTEGER,
+			},
+			name: {
+				type: DataTypes.STRING,
+				notNull: true,
+			},
+			email: {
+				type: DataTypes.STRING,
+			},
+		}
+	);
+
+	// When using TypeScript, you can use the Infer utility to get the type of the model
+	type User = Infer<typeof users>;
+
+	const user: User = {
+		id: 1,
+		name: "John Doe",
+		email: "john-doe@gmail.com",
+	};
+
+	await users.Upsert({
+		data: user,
+		upsertOnlyUpdateData: {
+			name: user.name,
+			email: user.email,
 		},
-		email: {
-			type: DataTypes.STRING,
+		where: {
+			id: user.id,
 		},
-	}
-);
+	});
+	```
+=== "JavaScript"
+	```js linenums="1"
+	import { Model, DataTypes } from "d1-orm";
 
-// When using TypeScript, you can use the Infer utility to get the type of the model
-type User = Infer<typeof users>;
+	const users = new Model(
+		{
+			tableName: "users",
+			D1Orm: MyD1OrmInstance,
+			primaryKeys: "id",
+		},
+		{
+			id: {
+				type: DataTypes.INTEGER,
+			},
+			name: {
+				type: DataTypes.STRING,
+				notNull: true,
+			},
+			email: {
+				type: DataTypes.STRING,
+			},
+		}
+	);
 
-const user: User = {
-	id: 1,
-	name: "John Doe",
-	email: "john-doe@gmail.com",
-};
+	const user = {
+		id: 1,
+		name: "John Doe",
+		email: "john-doe@gmail.com",
+	};
 
-await users.Upsert({
-	data: user,
-	upsertOnlyUpdateData: {
-		name: user.name,
-		email: user.email,
-	},
-	where: {
-		id: user.id,
-	},
-});
-```
+	await users.Upsert({
+		data: user,
+		upsertOnlyUpdateData: {
+			name: user.name,
+			email: user.email,
+		},
+		where: {
+			id: user.id,
+		},
+	});
+	```

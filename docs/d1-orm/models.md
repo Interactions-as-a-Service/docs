@@ -120,11 +120,11 @@ This will return the first 10 users with a name of "John Doe", ordered by ID, eq
 
 ## Inserting Data
 
-There are two methods used to insert data into the database. The first is `Model.InsertOne()`, which will insert a single row, and the second is `Model.InsertMany()`, which will insert multiple rows. Both accept an optional boolean parameter instructing the [Query Building](./query-building.md) to generate `INSERT or REPLACE` instead of just `INSERT`. This mechanism differs from [Upsert](./upserting.md) by its requirement of only replacing records based on the primary key.
+There are two methods used to insert data into the database. The first is `Model.InsertOne()`, which will insert a single row, and the second is `Model.InsertMany()`, which will insert multiple rows. Both accept an optional boolean parameter instructing the [Query Builder](./query-building.md) to generate `INSERT or REPLACE` instead of just `INSERT`. This mechanism differs from [Upsert](./upserting.md) by its requirement of only replacing records based on the primary key.
 
 ### InsertOne()
 
-This method takes just one parameter, which is the data to insert. This should be an object with a key of the column name, and a value of the value to insert. For example:
+This method takes between one and two parameters, the first being the data to insert. This should be an object with a key of the column name, and a value of the value to insert. It also supports an optional boolean parameter to generate to generate an `INSERT or REPLACE` query instead of just `INSERT`. For example:
 
 === "Insert"
 	```ts
@@ -145,7 +145,7 @@ This will insert a new user with a name of "John Doe" and an email of "john-doe@
 
 ### InsertMany()
 
-This method takes just one parameter, which is an array of data to insert. This should be an array of objects with a key of the column name, and a value of the value to insert. For example:
+This method takes between one and two parameters, the first of which is an array of data to insert. This should be an array of objects with a key of the column name, and a value of the value to insert. It also supports an optional boolean parameter to generate an `INSERT or REPLACE` query instead of just `INSERT`. For example:
 
 === "Insert"
 	```ts
