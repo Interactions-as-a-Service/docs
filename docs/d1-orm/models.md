@@ -40,7 +40,7 @@ const users = new Model(
 );
 ```
 
-!!! tip "If you're using TypeScript"
+??? tip "If you're using TypeScript"
 	You can automatically determine the type of your table using the following:
 
 	```ts
@@ -53,10 +53,15 @@ const users = new Model(
 
 Both arguments are required. The first argument is the model options, and the second argument is the model schema.
 
-- The model options should contain the `D1Orm` instance we created earlier, and the `tableName` of the model. Additionally, it will have a `primaryKey` value, which can be a string, or an array of strings - for when more than one primary key is needed. When using the `uniqueKeys` property, you provide an array of arrays of strings - for example: `#!js [["email"], ["username", "tag"]]`. This would mean that `email`s must be unique - as well as any combination of `username` and `tag`.
+- The model options should contain the `D1Orm` instance we created earlier, and the `tableName` of the model. 
+!!! note "D1Orm Field"
+	You don't need to specify the `D1Orm` field in the model options immediately. You can do it later, using the `SetOrm` method. This is useful if you want to create a model, but not initialise it immediately. It must be initialised before you can run any queries, however.
 
-!!! warning "AutoIncrement"
-	AutoIncrement can only be used on a single column, and that column must be the primary key, and of type Integer.
+- Additionally, it will have a `primaryKey` value, which can be a string, or an array of strings - for when more than one primary key is needed. 
+- When using the `uniqueKeys` property, you provide an array of arrays of strings - for example: `#!js [["email"], ["username", "tag"]]`. This would mean that `email`s must be unique - as well as any combination of `username` and `tag`.
+
+??? warning "Using AutoIncrement?"
+	AutoIncrement can only be used on primary key, integer columns. Additionally, there can only be one primary key when using auto increment.
 
 - The model schema should contain the columns of the model. The key of the object should be the name of the column, and the value should be the column options. There are three properties in a `ModelColumn`.
 

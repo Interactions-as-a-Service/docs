@@ -38,6 +38,7 @@ nav:
       - Query Building: d1-orm/query-building.md
       - Upserting: d1-orm/upserting.md
       - API Reference: https://orm.interactions.rest/modules
+  - Blog: https://blog.interactions.rest
 markdown_extensions:
   - toc:
       permalink: true
