@@ -193,10 +193,10 @@ This is equivalent to `#!sql DELETE FROM users WHERE name = "John Doe"`.
 
 ## Updating Data
 
-To update data in your table, you simply call the `Model.Update()` method. This has two parameters, the first is an object with a `where` property. This is used to filter the rows to update. See [Query Building](./query-building.md) for more information on how to use the `where` property. The second parameter is an object with the data to update. This should be an object with a key of the column name, and a value of the value to update.
+To update data in your table, you simply call the `Model.Update()` method. This takes an object with a `where` property, which is used to filter the rows to update. See [Query Building](./query-building.md) for more information on how to use the `where` property. The other property, `data`, is an object with the data to update, with keys for the column names, and values for the data to update.
 
 ```ts
-await users.Update({ where: { name: "Jane Doe" } }, { name: "John Doe" });
+await users.Update({ where: { name: "Jane Doe" }, data: { name: "John Doe" }});
 ```
 
 This is equivalent to `#!sql UPDATE users SET name = "Jane Doe" WHERE name = "John Doe"`.
