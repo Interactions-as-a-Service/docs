@@ -60,8 +60,10 @@ Both arguments are required. The first argument is the model options, and the se
 - Additionally, it will have a `primaryKey` value, which can be a string, or an array of strings - for when more than one primary key is needed. 
 - When using the `uniqueKeys` property, you provide an array of arrays of strings - for example: `#!js [["email"], ["username", "tag"]]`. This would mean that `email`s must be unique - as well as any combination of `username` and `tag`.
 
-??? warning "Using AutoIncrement?"
+??? warning "Using AutoIncrement or WithRowid?"
 	AutoIncrement can only be used on primary key, integer columns. Additionally, there can only be one primary key when using auto increment.
+
+	WithRowid should be used when you want to use the `rowid` column, like if you want to use it as your primary key. By default, the `rowid` column will be omitted unless you set WithRowid to true, or add an AutoIncrement column. Note that if both are set, it will throw an error.
 
 - The model schema should contain the columns of the model. The key of the object should be the name of the column, and the value should be the column options. There are three properties in a `ModelColumn`.
 
